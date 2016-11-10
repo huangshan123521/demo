@@ -1,3 +1,104 @@
+// 浏览器的判断
+(function(){
+	window.sys={}; //[object Object] 	
+	var ua=navigator.userAgent.toLowerCase();// alert(ua); 	 
+	var s;
+
+// 	if ((/msie([\d.]+)/).test(ua)) {
+// 		s=ua.match(/msie([\d.]+)/);
+// 		sys.ie=s[1];
+// 	};
+// 	if ((/firefox\/([\d.]+)/).test(ua)) {
+// 		s=ua.match(/firefox\/([\d.]+)/);
+// 		sys.firefox=s[1];
+// 	};
+// 	if ((/chrome\/([\d.]+)/).test(ua)) {
+// 		s=ua.match(/chrome\/([\d.]+)/);
+// 		sys.chrome=s[1];
+// 	};
+// 	if ((/version\/([\d.]+).*safari/).test(ua)) {
+// 		s=ua.match(/version\/([\d.]+).*safari/);
+// 		sys.safari=s[1];
+// 	};
+// 	if ((/opera.*version\/([\d.]+)/).test(ua)) {
+// 		s=ua.match(/opera.*version\/([\d.]+)/));
+// 		sys.opera=s[1];
+// 	};
+// 	alert(sya.opera)
+
+	(s=ua.match(/msie([\d.]+)/))?sys.ie=s[1]:
+	(s=ua.match(/firefox\/([\d.]+)/))?sys.firefox=s[1]:
+	(s=ua.match(/chrome\/([\d.]+)/))?sys.chrome=s[1]:
+	(s=ua.match(/version\/([\d.]+).*safari/))?sys.safari=s[1]:
+	(ua.match(/opera.*version\/([\d.]+)/))?sys.opera=s[1]:
+	0;
+})();
+
+
+// DOM加载
+function addDomLoaded(fn){
+	var isReady=false;
+	var timer=null;
+	function doReady () {
+		if(isReady)return;
+		isReady=true;
+		if(timer)clearInterval(timer);
+		fn();
+	}
+	if((sys.webkit&&sys.webkit<525)||(sys.opera&&sys.opera<9)||(sys.firefox&&sys.firefox<3)){
+		timer=setInterval(function(){
+			if(/loaded|complete/.test(document.readyState)){
+				doReady();
+			}
+		},1);
+	}
+	else if(document.addEventListener){
+		// W3C
+		addEvent(document,'DOMContentLoaded',function(){
+			doReady();
+		removeEvent(document,'DOMContentLoaded',arguments.callee);
+		});
+	}
+	else if(sys.ie&&sys.ie<9){
+		var timer=null;
+		timer=setInterval(function  () {
+			try{
+				document.documentElement.doScroll('left');
+				doReady();
+			}catch(ex){};
+		});
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 跨浏览器获取窗口大小
 function getInner(){
 	if(window.innerWidth!='undefined'){
@@ -56,32 +157,29 @@ function removeRule (sheet,index) {
 	// 3.函数中的this指向处理事件的节点，而IE指向window 要兼容
 	// 4.监听函数的执行顺序应当是按照当时绑定的顺序执行，而IE却不是 要兼容
 	// 5.函数体不用使用event=event|window.event;来标准化Event对像
-
-
-// 上
-// // 跨浏览器添加事件绑定
-// function addEvent (obj,type,fn) {
-// 	// W3C
-// 	if(typeof obj.addEventListener!='undefined'){
-// 		obj.addEventListener(type,fn,false);
-// 	}else if(typeof obj.attachEvent!='undefined'){
-// 		obj.attachEvent('on'+type,fn);
-// 	}
-// }
-// // 跨浏览器删除事件绑定
-// function removeEvent (obj,type,fn) {
-// 	// W3C
-// 	if(typeof obj.removeEventListener!='undefined'){
-// 		obj.removeEventListener(type,fn,false);
-// 	}else if(typeof obj.detachEvent!='undefined'){
-// 		obj.detachEvent('on'+type,fn);
-// 	}
-// }
-
-//  中
-// 1.无法删除事件】
-// 2.无法顺序事件
-// 跨浏览器模拟事件绑定
+	// 上
+	// // 跨浏览器添加事件绑定
+	// function addEvent (obj,type,fn) {
+	// 	// W3C
+	// 	if(typeof obj.addEventListener!='undefined'){
+	// 		obj.addEventListener(type,fn,false);
+	// 	}else if(typeof obj.attachEvent!='undefined'){
+	// 		obj.attachEvent('on'+type,fn);
+	// 	}
+	// }
+	// // 跨浏览器删除事件绑定
+	// function removeEvent (obj,type,fn) {
+	// 	// W3C
+	// 	if(typeof obj.removeEventListener!='undefined'){
+	// 		obj.removeEventListener(type,fn,false);
+	// 	}else if(typeof obj.detachEvent!='undefined'){
+	// 		obj.detachEvent('on'+type,fn);
+	// 	}
+	// }
+	//  中
+	// 1.无法删除事件】
+	// 2.无法顺序事件
+	// 跨浏览器模拟事件绑定
 
 function addEvent (obj,type,fn) {
 	// W3C
@@ -154,7 +252,7 @@ addEvent.fixEvent.preventDefault=function(){
 addEvent.fixEvent.stopPropagation=function(){
 	this.cancelBubble=true;
 }
-获取目标点
+// 获取目标点
 // addEvent.fixEvent=function(event){
 // 	event.target=event.srcElement;
 // 	return event;
@@ -173,11 +271,6 @@ function trim(str){
 // 	removeEvent(document,'mouseover',move);
 // 	removeEvent(document,'mouseup',up);
 // }
-// 锁屏后防止，通过其他渠道拖拉页面滚动条
-addEvent(window,'scroll',function(){
-	document.documentElement.scrollTop=0;
-	document.body.scrollTop=0;
-});
 
 
 

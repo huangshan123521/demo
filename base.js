@@ -6,6 +6,10 @@ var $=function  () {
 function Base () {
 	this.elements=[]
 };
+	// 初始化
+	Base.prototype.ready=function(fn){
+		addDomLoaded(fn);
+	};
 	// 创建数组来保存获取的节点和节点数组
 	Base.prototype.elements=[];
 	// 获取节点的操作写在构造函数里面
@@ -49,9 +53,17 @@ function Base () {
 		return this;
 	}
 	// 获取某个节点并返回节点对象
-	Base.prototype.getElement=function  (num) {
+	Base.prototype.ge=function  (num) {
 		return this.elements[num];
 	}
+	// 获得首个节点，并返回这个节点对象
+	Base.prototype.first=function  () {
+		return this.elements[0];
+	}
+	// 获得最后一个节点，并返回这个节点对象
+	Base.prototype.last=function  () {
+	return this.elements[this.elements.length-1];
+	}	
 	// 添加class
 	Base.prototype.addClass=function(className){
 		for (var i = 0; i < this.elements.length; i++) {
@@ -253,6 +265,13 @@ function Base () {
 		Base.prototype[name]=fn;
 	};
 
+// 使用CSS选择器方式封装库，但是我感觉现在这个库我用着挺好的，先暂时不使用这个功能，要是用到再说
+
+// 锁屏后防止，通过其他渠道拖拉页面滚动条
+	addEvent(window,'scroll',function(){
+		document.documentElement.scrollTop=0;
+		document.body.scrollTop=0;
+	});
 
 
 
